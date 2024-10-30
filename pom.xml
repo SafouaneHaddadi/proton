@@ -3,13 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+<!-- groupId : un identifiant unique du groupe de projets (souvent basé sur le nom de domaine).-->
     <groupId>com.visualpathit</groupId>
+    <!-- artifactId : identifie ce projet particulier.-->
     <artifactId>vprofile</artifactId>
+    <!--packaging : indique que le résultat de la construction est un fichier .war, c’est-à-dire une application Web prête pour un serveur (comme Tomcat).-->
     <packaging>war</packaging>
+    <!---version : version du projet (v2 ici)-->
     <version>v2</version>
     <name>Visualpathit VProfile Webapp</name>
     <url>http://maven.apache.org</url>
 
+
+<!--Les propriétés définissent les versions de différentes bibliothèques utilisées. 
+Cela rend les versions faciles à mettre à jour en les modifiant seulement ici au lieu de chaque dépendance dans le fichier. 
+Par exemple, la version de Spring est définie par ${spring.version}.-->
     <properties>
         <spring.version>6.0.11</spring.version>
         <spring-boot.version>3.1.3</spring-boot.version>
@@ -26,6 +34,18 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+
+<!-- Les dépendances indiquent toutes les bibliothèques que Maven doit télécharger et inclure dans le projet pour le faire fonctionner correctement. 
+Voici un aperçu des principales dépendances dans ce fichier :
+
+-Spring Web et Spring MVC : permettent de créer des applications Web et REST avec le framework Spring.
+-Spring Security : pour la gestion de la sécurité et des authentifications.
+-Hibernate et Spring Data JPA : permettent l’accès et la gestion de la base de données.
+-MySQL Connector : pour se connecter à une base de données MySQL.
+-Logback : pour la gestion des logs.
+-JUnit et Mockito : pour les tests unitaires.
+-RabbitMQ et Elasticsearch : pour la gestion de la messagerie et du moteur de recherche.
+-->
 
     <dependencies>
         <!-- Spring Framework -->
@@ -252,35 +272,48 @@
     </dependencies>
 
 
+<!--
+Les plugins automatisent certaines parties du processus de construction, comme le déploiement, les tests et les rapports de couverture de code
+-->
     <build>
         <plugins>
-            <!-- Jetty Plugin -->
+            <!-- Jetty Plugin : Ce plugin peut lancer un serveur Jetty, un serveur Web léger, pour tester et déboguer l'application localement sans avoir besoin de la déployer sur un autre serveur -->
             <plugin>
+            <!--groupId, artifactId, et version : définissent les informations du plugin. Ces balises indiquent à Maven de télécharger la version spécifiée du plugin Jetty depuis son repository.-->
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>11.0.15</version>
+                <!--<configuration> : contient les paramètres spécifiques pour configurer le comportement du plugin Jetty-->
                 <configuration>
                     <webApp>
+                    <!--context : spécifie le chemin de contexte de l'app Web sur le serveur Jetty. Ici, il est défini sur /, ce qui signifie que l'app sera accessible directement depuis la racine du serveur (localhost:8080/ par défaut-->
                         <contextPath>/</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
 
-            <!-- Maven War Plugin -->
+            <!-- Maven War Plugin : utilisé pour empaqueter l'appli dans un fichier .war (Web Application Archive), un format de fichier destiné à être déployé sur un serveur d'appli Java, comme Tomcat ou Jett -->
             <plugin>
+            <!--Bien que ce plugin n'ait pas de config particulière ici, il est chargé par défaut de construire l’archive .war lors de la phase package. Cela inclut tous les fichiers et config de l'app Web nécessaires (code source, fichiers de config, bibliothèques dépendantes) dans une structure spécifique prête pour le déploiemen-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
-            <!-- JaCoCo Plugin -->
+
+
+            <!-- JaCoCo Plugin : permettant de mesurer la couverture de code (quelles parties du code sont couvertes par des tests unitaires) et de générer un rapport -->
 <!--            <plugin>-->
 <!--                <groupId>org.jacoco</groupId>-->
 <!--                <artifactId>jacoco-maven-plugin</artifactId>-->
 <!--                <version>0.8.10</version>-->
+
+<!-- chaque balise <execution> décrit un ensemble de tâches pour Jacoco à effectuer lors d'une phase spécifique. -->
+
 <!--                <executions>-->
 <!--                    <execution>-->
 <!--                        <id>jacoco-initialize</id>-->
 <!--                        <phase>process-resources</phase>-->
+<!-- goals : indique les objectifs à accomplir par Jacoco dans chaque phase-->
 <!--                        <goals>-->
 <!--                            <goal>prepare-agent</goal>-->
 <!--                        </goals>-->
